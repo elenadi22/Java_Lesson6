@@ -1,0 +1,157 @@
+1.	Подумать над структурой класса Ноутбук для магазина техники - выделить поля и методы. Реализовать в java.
+2.	Создать множество ноутбуков.
+3.	Написать метод, который будет запрашивать у пользователя критерий (или критерии) фильтрации и выведет ноутбуки, отвечающие фильтру. Критерии фильтрации можно хранить в Map. Например:
+“Введите цифру, соответствующую необходимому критерию:
+1 - ОЗУ
+2 - Объем ЖД
+3 - Операционная система
+4 - Цвет …
+4.	Далее нужно запросить минимальные значения для указанных критериев - сохранить параметры фильтрации можно также в Map.
+5.	Отфильтровать ноутбуки их первоначального множества и вывести проходящие по условиям.    }        
+
+package Lesson6;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+    
+
+public class hw_6{
+    
+    public static HashMap<String, String> getFilter(){
+        Scanner scan  = new Scanner(System.in);
+        HashMap<String,String> parameters = new HashMap<>();
+        System.out.println("Укажите параметры ноутбука" + "\nУкажите размер жесткого диска: 300, 500, 700, 1000");
+        String enterDiscMem = scan.nextLine();
+        parameters.put("discMem",enterDiscMem);
+        int intParseEnterDiscMem = Integer.parseInt(enterDiscMem);
+        System.out.println("Укажите количество оперативной памяти в Гб: 4, 8, 16 ");
+        String enterOperMem = scan.nextLine();
+        parameters.put("operMem",enterOperMem);
+        System.out.println("Укажите операционную систему: Linux, ios, Windows");
+        String enterOperSystem = scan.nextLine();
+        parameters.put("operSystem",enterOperSystem);
+        System.out.println("Укажите цвет ноутбука: black, white");
+        String enterColor = scan.nextLine();
+        parameters.put("color",enterColor);    
+        return parameters;
+    }        
+
+    
+    public static void main(String[] args) {
+            notebook samsung_a52 = new notebook(111111, "samsung_a52", 300, "black", "8", "Windows");
+            notebook samsung_m31s = new notebook(111112, "samsung_m31s",1000, "black", "16", "Linux");
+            notebook lenovo = new notebook(111113, "lenovo", 500, "black", "32", "Windows");
+            notebook macbook_14pro = new notebook(111114, "macbook_14pro", 1000, "white", "32", "ios");
+            notebook asus_x515 = new notebook(111115, "asus_x515", 300, "white", "16", "Windows");
+            notebook acer_air5 = new notebook(111116, "acer_air5", 600, "white", "8", "Windows");
+
+            Set <notebook> laptop = new HashSet<>();
+            laptop.add(samsung_a52);
+            laptop.add(samsung_m31s);
+            laptop.add(lenovo);
+            laptop.add(macbook_14pro);
+            laptop.add(asus_x515);
+            laptop.add(acer_air5);
+            for(notebook tempnotebook : laptop){
+                System.out.println(tempnotebook.getID() + " " + tempnotebook.getmodel()+ " " + tempnotebook.getDiscMem()
+                + " " + tempnotebook.getColor() + " " + tempnotebook.getOperMem() + " " + tempnotebook.getOperSystem());   
+            }
+
+            HashMap<String,String> filter = getFilter();
+            List<notebook> listnotebook = new ArrayList<>();
+            for(notebook tempnotebook : laptop){
+                if(tempnotebook.isGood(filter)){
+                    listnotebook.add(tempnotebook);
+                }
+            }
+
+            System.out.println("по вашему запросу "); 
+            for(HashMap.Entry<String, String> e:filter.entrySet()){
+                System.out.println(e.getKey() + "=" + e.getValue());
+           
+            }
+            System.out.println("найдено");
+            for(notebook tempnotebook : listnotebook){
+                System.out.println(tempnotebook.getID() + " " + tempnotebook.getmodel());   
+            }
+
+    }
+    
+   
+}        
+    
+    
+    
+package Lesson6;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+public class notebook {
+    private int ID;
+    private String model;
+    private int discMem;
+    private String color;
+    private String operMem;
+    private String operSystem;
+
+    public notebook(){
+    }
+    public notebook(int IDnumber, String notebookModel, int discMem, String color, String operMem, String operSystem){
+        this.ID = IDnumber;
+        this.model = notebookModel;
+        this.discMem = discMem;
+        this.color = color;
+        this.operMem = operMem;
+        this.operSystem = operSystem;
+    }
+    public int getID(){
+        return ID;
+    }
+    public String getmodel(){
+        return model;
+    }
+    public int getDiscMem(){
+        return discMem;
+    }
+    public String getColor(){
+        return color;
+    }
+    public String getOperMem(){
+        return operMem;
+    }
+    public String getOperSystem(){
+        return operSystem;
+    }
+
+    public boolean isGood(HashMap<String, String> parameters){
+        System.out.println(Integer.parseInt(parameters.get("discMem")) == this.discMem);
+        System.out.println(parameters.get("operMem") == this.operMem);
+        System.out.println(parameters.get("operSystem").equals(this.operSystem));
+        System.out.println(parameters.get("color").equals(this.color));
+        System.out.println();
+        if (Integer.parseInt(parameters.get("discMem")) == this.discMem) {
+            if (parameters.get("operMem").equals(this.operMem)) {
+                if (parameters.get("operSystem").equals(this.operSystem)) {
+                    if (parameters.get("color").equals(this.color)) {
+                        return true;
+                        }
+                    }
+                }
+            }
+        return false;
+    }        
+}
+
+
+
+
+
